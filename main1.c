@@ -10,11 +10,15 @@ int *alloc;
 int *need;
 int *seq;
 int *wrk;
+int *req;
+int *ord;
+int *prch;
+int pr;
 bool *check;
 void input();
 void input2();
 bool safestate();
-void request();
+int request(int i1,int i2);
 int main()
 {
         printf("Question 1 or 2: ");
@@ -60,6 +64,71 @@ int main()
         else
                 printf("\t\tSystem is not in Safe State\n\n");
         printf("\n\n");
+	int temp;
+	printf("Continue with Resource Requesting?(Yes-1/No-0): ");
+	scanf("%d",&temp);
+	if(temp==1){
+	printf("Enter Number of Processes requesting resources: ");
+	scanf("%d",&pr);
+	ord=(int*)malloc(pr*sizeof(int));
+	prch=(int*)malloc(pr*sizeof(int));
+	for(i=0;i<pr;i++)
+	{
+		printf("Enter Process number requesting resources: ");
+		scanf("%d",(ord + i));
+		*(prch + i)=0;
+	}
+	req=(int*)malloc(pr*n*sizeof(int));
+	for(i=0;i<pr;i++)
+        {
+		for(int j=0;j<n;j++){
+		        printf("\nEnter Requested Instances for Resource %c: of P%d: ",(char)j+65,*(ord + i));
+		        scanf("%d",(req + pr*i + j));
+		}
+        }
+	int l=0;
+	i=0;
+	
+	while(l<pr)
+	{
+		if(i>=pr)
+			i=0;
+		if(*(prch + i)==-2 || *(prch + i)==-1)
+		{
+			i++;
+			continue;
+		}
+		int val=request(i,*(ord + i));
+		printf("\ni=%d,val=%d\n",i,val);
+		if(val==0)
+		{
+			printf("\nRequest for P%d cannot be Processed since exceeded Maximum Claim.... Continuing with other Requests..\n",i);
+			*(prch + i)=-1;
+			l++;
+		}
+		else if(val==1)
+		{
+			printf("\nRequest for P%d cannot be Processed with Available Resources....Request carried to later processing.... Continuing with other Requests..\n",i);
+			*(prch + i)+=1;
+		}
+		else
+		{
+			printf("\nRequest for P%d is Successfully Processed and System in Safe State....\n",i);
+			printf("\t\tSystem is in Safe State\n\tSafe Sequence: ");
+		        for(int j=0;i<m-1;j++)
+		                printf("P%d --> ",*(seq + j));
+		        printf("P%d\nContinuing with other Requests",*(seq + m-1));
+			*(prch + i)=-2;
+			l++;
+		}
+		if(*(prch + i)>=pr-l)
+		{
+			printf("Requests cannot be processed for all remaining Processes....");
+			l=pr+1;
+		}
+		i++;
+	}
+	}
 }
 void input2()
 {
@@ -268,6 +337,64 @@ bool safestate()
                 return true;
         else if(flag==1)
                 return false;
+}
+
+int request(int i1,int i2)
+{
+
+	int fl=0,i=0;
+	for(i=0;i<n;i++)
+        {
+		if(*(req + pr*i1 +  i)<=*(need + m*i2 + i))
+			fl=1;
+		else{
+			fl=0;
+			break;
+		}
+        }
+	if(fl==0)
+		return 0;
+	else
+	{
+		for(i=0;i<n;i++)
+        	{
+			if(*(req + pr*i1 + i)<=*(avail + m*i2 +  i))
+				fl=1;
+			else{
+				fl=0;
+				break;
+			}
+        	}
+		if(fl==0)
+			return 1;
+		else
+		{	
+			int *oavail=(int*)malloc(n*sizeof(int));
+			int *oalloc=(int*)malloc(n*sizeof(int));
+			int *oneed=(int*)malloc(n*sizeof(int));
+			for(i=0;i<n;i++)
+			{
+				*(oavail + i)=*(avail + m*i2 +  i);
+				*(avail + m*i2 +  i)-=*(req + pr*i1 +  i);
+				*(oalloc + i)=*(alloc + m*i2 +  i);
+				*(alloc + m*i2 +  i)+=*(req + pr*i1 +  i);
+				*(oneed + i)=*(need + m*i2 +  i);
+				*(need + m*i2 +  i)-=*(req + pr*i1 +  i);
+			}
+			if(safestate()==true)
+				return 2;
+			else
+			{
+				for(i=0;i<n;i++)
+				{
+					*(avail + m*i2 +  i)=*(oavail + i);
+					*(alloc + m*i2 +  i)=*(oalloc + i);
+					*(need + m*i2 +  i)=*(oneed + i);
+					return 3;
+				}
+			}
+		}
+	}
 }
 
 
