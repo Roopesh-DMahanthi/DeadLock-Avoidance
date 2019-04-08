@@ -78,8 +78,10 @@ int main()
                         printf("P%d --> ",seq[i]);
                 printf("P%d\n",seq[m]);
         }
-        else
+        else{
                 printf("\t\tSystem is not in Safe State\n\n");
+		return 0;
+	}
         printf("\n\n");
 	int temp;
 	printf("Continue with Resource Requesting?(Yes-1/No-0): ");
