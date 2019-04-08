@@ -128,7 +128,6 @@ int main()
 	oavail=(int*)calloc(n+1,sizeof(int));
 	oalloc=(int*)calloc(n+1,sizeof(int));
 	oneed=(int*)calloc(n+1,sizeof(int));
-	printf("one\n");
 	while(l<pr)
 	{
       		if(i>pr)
@@ -138,7 +137,6 @@ int main()
 			i++;
 			continue;
 		}
-		printf("two\n%d %d\nthree",i,ord[i]);
 		int val=request(i,ord[i]);
 		//printf("\ni=%d,val=%d\n",i-1,val);
 		if(val==0)
@@ -263,10 +261,8 @@ void input()
                 {
                         printf("\nEnter Allocated Number of Instances of Resource %c For Process P%d: ",(char)j+64,i-1);
                         scanf("%d",&alloc[i][j]);
-			printf("\t%d %d\n",alloc[0][0],need[0][0]);
                         tot[j]+=alloc[i][j];
                         need[i][j]=max[i][j]-alloc[i][j];
-			printf("\t%d %d\n",alloc[0][0],need[0][0]);
                 }
         }
         }
@@ -286,7 +282,7 @@ void input()
 	for(j=1;j<=n;j++)
 	{
 		avail[j]=res[j]-tot[j];
-		printf("%d ",avail[j]);
+		//printf("%d ",avail[j]);
 	}
         //printf("%d %d\n%d %d",&alloc[0][0],&need[0][0],&max[4][0],&alloc[4][0]);
         
@@ -396,7 +392,7 @@ bool safestate()
                         for(x=1;x<=n;x++)
                         {
                                 wrk[x]+=alloc[i][x];
-                                //printf("%d ",*(wrk + x));
+                                printf("%d ",wrk[x]);
                         } 
                         seq[lc]=i-1;
                         printf("\nP%d -->",i-1);
@@ -426,9 +422,7 @@ bool safestate()
 
 int request(int i1,int i2)
 {
-	printf("i2=%d\n",i2);
 	i2++;
-	printf("i2=%d\n",i2);
 	int fl=0,i=0;
 	
 	for(i=1;i<=n;i++)
@@ -438,11 +432,10 @@ int request(int i1,int i2)
 		}
 		else{
 			fl=0;
-			printf("i1:%d i2:%d i:%d need:%d\n",i1,i2,i,need[i2][i]);
+			//printf("i1:%d i2:%d i:%d need:%d\n",i1,i2,i,need[i2][i]);
 			break;
 		}
         }
-	printf("fl:%d",fl);
 	if(fl==0)
 		return 0;
 	else
@@ -461,7 +454,7 @@ int request(int i1,int i2)
 			return 1;
 		else
 		{	
-			printf("test\n");
+			
 			for(i=1;i<=n;i++)
 			{
 				printf("(%d)",i);
