@@ -20,25 +20,15 @@ int *oneed;
 int pr;
 bool *check;
 void input();
-void input2();
 void disp();
 bool safestate();
 int request(int i1,int i2);
 int main()
 {
-        printf("Question 1 or 2: ");
-        scanf("%d",&qsn);
-        if(qsn==1){
         printf("Enter No of Processes : ");
         scanf("%d",&m);
         printf("Enter No of Resources : ");
         scanf("%d",&n);
-        }
-        else
-        {
-                m=5;
-                n=4;
-        }
         int i=0;
         
         max=(int**)calloc(m+1,sizeof(int));
@@ -77,12 +67,6 @@ int main()
 	seq=(int*)calloc(m+1,sizeof(int));
         check=(bool*)calloc(n+1,sizeof(bool));
         wrk=(int*)calloc(n,sizeof(int));
-        /*for(i=0;i<m;i++){
-                *(seq + i)=i;
-                printf("%d ",*(seq + i));
-        }*/
-        if(qsn==2)
-                input2();
         input();
 	disp();
         printf("\n\n");
@@ -96,8 +80,6 @@ int main()
         }
         else
                 printf("\t\tSystem is not in Safe State\n\n");
-	/*if(qsn==2)
-		return 0;*/
         printf("\n\n");
 	int temp;
 	printf("Continue with Resource Requesting?(Yes-1/No-0): ");
@@ -188,63 +170,12 @@ int main()
 		main();
 }
 
-void input2()
-{
-        max[1][1]=0;
-        max[1][2]=0;
-        max[1][3]=1;
-        max[1][4]=2;
-        max[2][1]=1;
-        max[2][2]=7;
-        max[2][3]=5;
-        max[2][4]=0;
-        max[3][1]=2;
-        max[3][2]=3;
-        max[3][3]=5;
-        max[3][4]=6;
-        max[4][1]=0;
-        max[4][2]=6;
-        max[4][3]=5;
-        max[4][4]=2;
-        max[5][1]=0;
-        max[5][2]=6;
-        max[5][3]=5;
-        max[5][4]=6;
-        alloc[1][1]=0;
-        alloc[1][2]=0;
-        alloc[1][3]=1;
-        alloc[1][4]=2;
-        alloc[2][1]=1;
-        alloc[2][2]=0;
-        alloc[2][3]=0;
-        alloc[2][4]=0;
-        alloc[3][1]=1;
-        alloc[3][2]=3;
-        alloc[3][3]=5;
-        alloc[3][4]=4;
-        alloc[4][1]=0;
-        alloc[4][2]=6;
-        alloc[4][3]=3;
-        alloc[4][4]=2;
-        alloc[5][1]=0;
-        alloc[5][2]=0;
-        alloc[5][3]=1;
-        alloc[5][4]=4;
-        for(int i=1;i<=m;i++)
-        {
-                for(int j=1;j<=n;j++)
-                {
-                        need[i][j]=max[i][j]-alloc[i][j];
-                }
-        }
-}
-
 void input()
 {
         res=(int*)calloc(n+1,sizeof(int));
         tot=(int*)calloc(n+1,sizeof(int));
         int i=0,j=0;
-        if(qsn==1){
+
         for(i=1;i<=n;i++)
         {
                 printf("\nEnter Total Number of Instances for Resource %c: ",(char)i+64);
@@ -264,20 +195,6 @@ void input()
                         tot[j]+=alloc[i][j];
                         need[i][j]=max[i][j]-alloc[i][j];
                 }
-        }
-        }
-	else{
-        res[1]=3;
-        res[2]=14;
-        res[3]=12;
-        res[4]=12;
-        for(int i=1;i<=m;i++)
-        {
-                for(int j=1;j<=n;j++)
-                {
-                        tot[j]+=alloc[i][j];
-                }
-        }
         }
 	for(j=1;j<=n;j++)
 	{
@@ -392,10 +309,10 @@ bool safestate()
                         for(x=1;x<=n;x++)
                         {
                                 wrk[x]+=alloc[i][x];
-                                printf("%d ",wrk[x]);
+                                //printf("%d ",wrk[x]);
                         } 
                         seq[lc]=i-1;
-                        printf("\nP%d -->",i-1);
+                        //printf("\nP%d -->",i-1);
                         lc++;
                         i++;
                         /*if(i>m)
@@ -457,14 +374,14 @@ int request(int i1,int i2)
 			
 			for(i=1;i<=n;i++)
 			{
-				printf("(%d)",i);
+				//printf("(%d)",i);
 				oavail[i]=avail[i];
 				avail[i]-=req[i1][i];
 				oalloc[i]=alloc[i2][i];
 				alloc[i2][i]+=req[i1][i];
 				oneed[i]=need[i2][i];
 				need[i2][i]-=req[i1][i];
-				printf("%d %d %d\n",avail[i],alloc[i2][i],need[i2][i]);
+				//printf("%d %d %d\n",avail[i],alloc[i2][i],need[i2][i]);
 			}
 			bool val;
 			val=safestate();
