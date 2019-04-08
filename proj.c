@@ -262,14 +262,11 @@ bool safestate()
 {       
         int i=1,flag=1,x=0,c=0,lc=1,ct=0,cc=0;
 	for(i=1;i<=n;i++){
-                check[i]=false;
 		wrk[i]=avail[i];
         }
-	/*for(i=1;i<=n;i++)
-	{
-				printf("(%d)",i);
-				printf("%d %d %d\n",avail[i],alloc[2][i],need[2][i]);
-	}*/
+	for(i=1;i<=m;i++){
+                check[i]=false;
+        }
 	i=1;
         while(flag==1)
         {
